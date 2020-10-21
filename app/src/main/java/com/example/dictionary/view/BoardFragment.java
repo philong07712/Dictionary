@@ -1,6 +1,7 @@
 package com.example.dictionary.view;
 
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class BoardFragment extends Fragment {
     private static final String TAG = BoardFragment.class.getSimpleName();
     private BoardViewModel mViewModel;
     private BoardFragmentBinding binding;
-    private List<Word> words;
+    private List<Word> wordList;
     private WordAdapter adapter;
     private LinearLayoutManager layoutManager;
 
@@ -56,7 +57,18 @@ public class BoardFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(BoardViewModel.class);
-        loadData();
+        mViewModel.getWords().observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
+            @Override
+            public void onChanged(List<Word> words) {
+                if (words.isEmpty()) {
+                    loadData();
+                }
+                else {
+                    wordList.addAll(words);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
         // TODO: Use the ViewModel
     }
 
@@ -64,22 +76,22 @@ public class BoardFragment extends Fragment {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
         List<Word> anhviet = new ArrayList<>();
-        if (words.isEmpty()) {
+        if (wordList.isEmpty()) {
             anhviet.addAll(databaseAccess.getWords());
         }
         else {
-            anhviet.addAll(databaseAccess.getWords(words.size(), 20));
+            anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
 
         }
         databaseAccess.close();
-        words.clear();
-        words.addAll(anhviet);
+        wordList.clear();
+        wordList.addAll(anhviet);
         adapter.notifyDataSetChanged();
     }
 
     public void initRecyclerView() {
-        words = new ArrayList<>();
-        adapter = new WordAdapter(getContext(), words);
+        wordList = new ArrayList<>();
+        adapter = new WordAdapter(getContext(), wordList);
         adapter.setOnClickListener((word, position) -> {
             navigateDefinition(word);
         });
@@ -96,7 +108,7 @@ public class BoardFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.i(TAG, "onScrolled: " + layoutManager.findLastVisibleItemPosition());
-                if (layoutManager.findLastVisibleItemPosition() == words.size() - 1) {
+                if (layoutManager.findLastVisibleItemPosition() == wordList.size() - 1) {
                     recyclerView.post(new Runnable() {
                         @Override
                         public void run() {
@@ -120,4 +132,9 @@ public class BoardFragment extends Fragment {
         transaction.commit();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mViewModel.setWords(wordList);
+    }
 }
