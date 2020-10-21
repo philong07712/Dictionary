@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Html;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.dictionary.R;
 import com.example.dictionary.databinding.DefinitionFragmentBinding;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.util.Constants;
+import com.example.dictionary.viewmodel.DefinitionViewModel;
 
 public class DefinitionFragment extends Fragment {
     private final String TAG = DefinitionFragment.class.getSimpleName();

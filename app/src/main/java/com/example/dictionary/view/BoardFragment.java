@@ -23,6 +23,7 @@ import com.example.dictionary.model.Word;
 import com.example.dictionary.view.adapter.WordAdapter;
 import com.example.dictionary.data.DatabaseAccess;
 import com.example.dictionary.databinding.BoardFragmentBinding;
+import com.example.dictionary.viewmodel.BoardViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.dictionary.view;
+package com.example.dictionary.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
