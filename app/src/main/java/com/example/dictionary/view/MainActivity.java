@@ -1,10 +1,11 @@
-package com.example.dictionary;
+package com.example.dictionary.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+
+import com.example.dictionary.R;
 
 public class MainActivity extends AppCompatActivity {
 

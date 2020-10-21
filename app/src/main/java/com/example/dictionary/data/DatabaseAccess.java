@@ -1,11 +1,11 @@
-package com.example.dictionary;
+package com.example.dictionary.data;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.room.Database;
+import com.example.dictionary.model.Word;
 
 import java.util.ArrayList;
 import java.util.List;

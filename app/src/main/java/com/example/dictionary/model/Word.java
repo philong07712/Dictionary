@@ -1,6 +1,8 @@
-package com.example.dictionary;
+package com.example.dictionary.model;
 
-public class Word {
+import java.io.Serializable;
+
+public class Word implements Serializable {
     private String content;
     private String definition;
 

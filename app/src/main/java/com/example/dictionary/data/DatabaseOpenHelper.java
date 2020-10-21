@@ -1,4 +1,4 @@
-package com.example.dictionary;
+package com.example.dictionary.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

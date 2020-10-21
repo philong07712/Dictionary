@@ -1,8 +1,8 @@
-package com.example.dictionary;
+package com.example.dictionary.view;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.dictionary.util.Constants;
+import com.example.dictionary.R;
+import com.example.dictionary.model.Word;
+import com.example.dictionary.view.adapter.WordAdapter;
+import com.example.dictionary.data.DatabaseAccess;
 import com.example.dictionary.databinding.BoardFragmentBinding;
 
 import java.util.ArrayList;
@@ -66,17 +71,18 @@ public class BoardFragment extends Fragment {
             anhviet.addAll(databaseAccess.getWords(words.size(), 20));
 
         }
-        Log.i(TAG, "loadData: anhviet " + anhviet.size());
         databaseAccess.close();
         words.clear();
         words.addAll(anhviet);
-        Log.i(TAG, "loadData: words " + words.size());
         adapter.notifyDataSetChanged();
     }
 
     public void initRecyclerView() {
         words = new ArrayList<>();
         adapter = new WordAdapter(getContext(), words);
+        adapter.setOnClickListener((word, position) -> {
+            navigateDefinition(word);
+        });
         binding.rvBoard.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getContext());
         binding.rvBoard.setLayoutManager(layoutManager);
@@ -101,6 +107,17 @@ public class BoardFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void navigateDefinition(Word word) {
+        DefinitionFragment fragment = new DefinitionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.WORD.WORD_ID, word);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }
