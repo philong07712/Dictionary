@@ -26,7 +26,7 @@ public class BoardFragment extends Fragment {
     private static final String TAG = BoardFragment.class.getSimpleName();
     private BoardViewModel mViewModel;
     private BoardFragmentBinding binding;
-    private List<String> words;
+    private List<Word> words;
     private WordAdapter adapter;
     private LinearLayoutManager layoutManager;
 
@@ -58,7 +58,7 @@ public class BoardFragment extends Fragment {
     public void loadData() {
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
-        List<String> anhviet = new ArrayList<>();
+        List<Word> anhviet = new ArrayList<>();
         if (words.isEmpty()) {
             anhviet.addAll(databaseAccess.getWords());
         }

@@ -36,12 +36,13 @@ public class DatabaseAccess {
         }
     }
 
-    public List<String> getWords() {
-        List<String> list = new ArrayList<>();
+    public List<Word> getWords() {
+        List<Word> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM anh_viet limit 20", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            list.add(cursor.getString(1));
+            Word word = new Word(cursor.getString(1), cursor.getString(2));
+            list.add(word);
             cursor.moveToNext();
         }
         cursor.close();
@@ -49,14 +50,15 @@ public class DatabaseAccess {
     }
 
 
-    public List<String> getWords(int size, int limit) {
+    public List<Word> getWords(int size, int limit) {
         int nextLimit = size + limit;
-        List<String> list = new ArrayList<>();
+        List<Word> list = new ArrayList<>();
         Cursor cursor;
         cursor = database.rawQuery("SELECT * FROM anh_viet limit " + nextLimit, null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            list.add(cursor.getString(1));
+            Word word = new Word(cursor.getString(1), cursor.getString(2));
+            list.add(word);
             cursor.moveToNext();
         }
         cursor.close();
