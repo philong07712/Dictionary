@@ -7,4 +7,6 @@
     <color name="colorGray_100">#F5F5F5</color>
     <color name="colorGray_600">#616161</color>
     <color name="colorGray_200">#EEEEEE</color>
+
+    <color name="colorGreen">#388E3C</color>
 </resources>
