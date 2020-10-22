@@ -12,11 +12,12 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dictionary.data.DatabaseAccess;
+import com.example.dictionary.data.EngDatabaseAccess;
+import com.example.dictionary.data.viet_anh.VietDatabaseAccess;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.databinding.ItemBoardBinding;
+import com.example.dictionary.util.Constants;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,13 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
     List<Word> wordFiltered;
     public boolean isSearching;
     OnClickListener listener;
-    public WordAdapter(Context context, List<Word> words) {
+    private int mType;
+
+    public WordAdapter(Context context, List<Word> words, int type) {
         this.context = context;
         this.wordFiltered = words;
         this.words = new ArrayList<>(wordFiltered);
+        mType = type;
     }
 
     @NonNull
@@ -82,15 +86,22 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
             List<Word> filteredList = new ArrayList<>();
             Log.i(TAG, "performFiltering: " + filter);
             if (filter.isEmpty() || filter == null) {
-                Log.i(TAG, "performFiltering: empty ");
                 isSearching = false;
                 filteredList.addAll(words);
-                Log.i(TAG, "performFiltering: filteredList size" + filteredList.size());
             } else {
+                Log.i(TAG, "performFiltering: " + mType);
                 isSearching = true;
-                DatabaseAccess access = DatabaseAccess.getInstance(context);
-                access.open();
-                filteredList.addAll(access.getWords(filter));
+                if (mType == Constants.WORD.ENG_TYPE) {
+                    EngDatabaseAccess access = EngDatabaseAccess.getInstance(context);
+                    access.open();
+                    filteredList.addAll(access.getWords(filter));
+                }
+                else {
+                    VietDatabaseAccess access = VietDatabaseAccess.getInstance(context);
+                    access.open();
+                    filteredList.addAll(access.getWords(filter));
+                }
+
             }
             FilterResults filterResults = new FilterResults();
             filterResults.values = filteredList;

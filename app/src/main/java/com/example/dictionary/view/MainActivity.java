@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.example.dictionary.FavoriteFragment;
 import com.example.dictionary.R;
 import com.example.dictionary.databinding.ActivityMainBinding;
+import com.example.dictionary.util.Constants;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectItemDrawer(MenuItem item) {
         Fragment myFragment = null;
+        Bundle bundle = new Bundle();
         Class fragmentClass;
         switch (item.getItemId())
         {
@@ -52,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.eng_viet_menu:
                 fragmentClass = BoardFragment.class;
+                bundle.putInt(Constants.WORD.TYPE_ID, Constants.WORD.ENG_TYPE);
                 break;
-//            case R.id.setting:
-//                fragmentClass = SettingFragment.class;
-//                break;
+            case R.id.viet_eng_menu:
+                fragmentClass = BoardFragment.class;
+                bundle.putInt(Constants.WORD.TYPE_ID, Constants.WORD.VIET_TYPE);
+                break;
 //            case R.id.logout:
 //                fragmentClass = LogoutFragment.class;
 //                break;
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         {
             e.printStackTrace();
         }
+        myFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_fragment, myFragment).commit();
         item.setChecked(true);

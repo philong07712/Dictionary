@@ -18,11 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.example.dictionary.data.viet_anh.VietDatabaseAccess;
 import com.example.dictionary.util.Constants;
 import com.example.dictionary.R;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.view.adapter.WordAdapter;
-import com.example.dictionary.data.DatabaseAccess;
+import com.example.dictionary.data.EngDatabaseAccess;
 import com.example.dictionary.databinding.BoardFragmentBinding;
 import com.example.dictionary.viewmodel.BoardViewModel;
 
@@ -37,9 +38,19 @@ public class BoardFragment extends Fragment {
     private List<Word> wordList;
     private WordAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private int mType = 0;
 
     public static BoardFragment newInstance() {
         return new BoardFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mType = bundle.getInt(Constants.WORD.TYPE_ID);
+        }
     }
 
     @Override
@@ -76,17 +87,29 @@ public class BoardFragment extends Fragment {
     }
 
     public void loadData() {
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getContext());
-        databaseAccess.open();
         List<Word> anhviet = new ArrayList<>();
-        if (wordList.isEmpty()) {
-            anhviet.addAll(databaseAccess.getWords());
+        if (mType == Constants.WORD.VIET_TYPE) {
+            VietDatabaseAccess databaseAccess = VietDatabaseAccess.getInstance(getContext());
+            databaseAccess.open();
+            if (wordList.isEmpty()) {
+                anhviet.addAll(databaseAccess.getWords());
+            }
+            else {
+                anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
+            }
+            databaseAccess.close();
         }
         else {
-            anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
-
+            EngDatabaseAccess databaseAccess = EngDatabaseAccess.getInstance(getContext());
+            databaseAccess.open();
+            if (wordList.isEmpty()) {
+                anhviet.addAll(databaseAccess.getWords());
+            }
+            else {
+                anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
+            }
+            databaseAccess.close();
         }
-        databaseAccess.close();
         wordList.clear();
         wordList.addAll(anhviet);
         adapter.setWords(wordList);
@@ -95,7 +118,7 @@ public class BoardFragment extends Fragment {
 
     public void initRecyclerView() {
         wordList = new ArrayList<>();
-        adapter = new WordAdapter(getContext(), wordList);
+        adapter = new WordAdapter(getContext(), wordList, mType);
         adapter.setOnClickListener((word, position) -> {
             navigateDefinition(word);
         });

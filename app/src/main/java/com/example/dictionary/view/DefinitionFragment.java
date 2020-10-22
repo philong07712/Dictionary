@@ -15,7 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.dictionary.data.DatabaseAccess;
+import com.example.dictionary.data.EngDatabaseAccess;
+import com.example.dictionary.data.viet_anh.VietDatabaseAccess;
 import com.example.dictionary.databinding.DefinitionFragmentBinding;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.util.Constants;
@@ -26,7 +27,6 @@ public class DefinitionFragment extends Fragment {
     private DefinitionViewModel mViewModel;
     private DefinitionFragmentBinding binding;
     private Word word;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,9 +62,16 @@ public class DefinitionFragment extends Fragment {
     public void initListener() {
         binding.fabFavorite.setOnClickListener(v -> {
             Log.i(TAG, "initListener: " + word.getId());
-            DatabaseAccess access = DatabaseAccess.getInstance(getContext());
-            access.open();
-            access.addFavorite(word.getId());
+            if (word.getType() == Constants.WORD.ENG_TYPE) {
+                EngDatabaseAccess access = EngDatabaseAccess.getInstance(getContext());
+                access.open();
+                access.addFavorite(word.getId());
+            }
+            else {
+                VietDatabaseAccess access = VietDatabaseAccess.getInstance(getContext());
+                access.open();
+                access.addFavorite(word.getId());
+            }
         });
     }
 }

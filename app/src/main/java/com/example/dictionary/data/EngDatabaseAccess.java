@@ -8,23 +8,23 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.dictionary.model.Word;
+import com.example.dictionary.util.Constants;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseAccess {
+public class EngDatabaseAccess {
     private SQLiteOpenHelper openHelper;
     private SQLiteDatabase database;
-    private static DatabaseAccess instance;
-
-    private DatabaseAccess(Context context) {
-        this.openHelper = new DatabaseOpenHelper(context);
+    private static EngDatabaseAccess instance;
+    private final int TYPE = Constants.WORD.ENG_TYPE;
+    private EngDatabaseAccess(Context context) {
+        this.openHelper = new EngDatabaseOpenHelper(context);
     }
 
-    public static DatabaseAccess getInstance(Context context) {
+    public static EngDatabaseAccess getInstance(Context context) {
         if (instance == null) {
-            instance = new DatabaseAccess(context);
+            instance = new EngDatabaseAccess(context);
         }
         return instance;
     }
@@ -44,7 +44,8 @@ public class DatabaseAccess {
         Cursor cursor = database.rawQuery("SELECT * FROM anh_viet limit 20", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Word word = new Word(cursor.getInt(0),
+            Word word = new Word(TYPE,
+                    cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2));
             list.add(word);
@@ -62,7 +63,8 @@ public class DatabaseAccess {
         cursor = database.rawQuery("SELECT * FROM anh_viet limit " + nextLimit, null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Word word = new Word(cursor.getInt(0),
+            Word word = new Word(TYPE,
+                    cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2));
             list.add(word);
@@ -79,7 +81,8 @@ public class DatabaseAccess {
                 filter + " %' limit 20", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Word word = new Word(cursor.getInt(0),
+            Word word = new Word(TYPE,
+                    cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2));
             list.add(word);
@@ -92,7 +95,8 @@ public class DatabaseAccess {
     public Word getWordById(int id) {
         Cursor cursor = database.rawQuery("SELECT * FROM anh_viet where id like " + id + "", null);
         cursor.moveToFirst();
-        Word word = new Word(cursor.getInt(0),
+        Word word = new Word(TYPE,
+                cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getString(2));
         cursor.close();
@@ -114,7 +118,8 @@ public class DatabaseAccess {
         Cursor cursor = database.rawQuery("SELECT anh_viet.id, word, content FROM anh_viet inner join favorite on anh_viet.id = favorite.id", null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            wordList.add(new Word(cursor.getInt(0),
+            wordList.add(new Word(TYPE,
+                    cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2)));
             cursor.moveToNext();
