@@ -1,12 +1,15 @@
 package com.example.dictionary.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.dictionary.model.Word;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +44,9 @@ public class DatabaseAccess {
         Cursor cursor = database.rawQuery("SELECT * FROM anh_viet limit 20", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Word word = new Word(cursor.getString(1), cursor.getString(2));
+            Word word = new Word(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2));
             list.add(word);
             cursor.moveToNext();
         }
@@ -57,7 +62,9 @@ public class DatabaseAccess {
         cursor = database.rawQuery("SELECT * FROM anh_viet limit " + nextLimit, null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Word word = new Word(cursor.getString(1), cursor.getString(2));
+            Word word = new Word(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2));
             list.add(word);
             cursor.moveToNext();
         }
@@ -72,12 +79,24 @@ public class DatabaseAccess {
                 filter + " %' limit 20", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Word word = new Word(cursor.getString(1), cursor.getString(2));
+            Word word = new Word(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2));
             list.add(word);
             cursor.moveToNext();
         }
         cursor.close();
         return list;
+    }
+
+    public Word getWordById(int id) {
+        Cursor cursor = database.rawQuery("SELECT * FROM anh_viet where id like " + id + "", null);
+        cursor.moveToFirst();
+        Word word = new Word(cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2));
+        cursor.close();
+        return word;
     }
 
     public String getDefinition(String word) {
@@ -88,6 +107,28 @@ public class DatabaseAccess {
         definition = cursor.getString(2);
         cursor.close();
         return definition;
+    }
+
+    public List<Word> getFavorite() {
+        List<Word> wordList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT anh_viet.id, word, content FROM anh_viet inner join favorite on anh_viet.id = favorite.id", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            wordList.add(new Word(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return wordList;
+    }
+
+    public void addFavorite(int id) {
+        ContentValues values = new ContentValues();
+        values.put("id", id);
+        database.insert("favorite", null, values);
+        database.close();
+        Log.i("TAG", "addFavorite: ");
     }
 
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.dictionary.FavoriteFragment;
 import com.example.dictionary.R;
 import com.example.dictionary.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
@@ -42,16 +43,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectItemDrawer(MenuItem item) {
-//        Fragment myFragment = null;
-//        Class fragmentClass;
-//        switch (item.getItemId())
-//        {
-//            case R.id.db:
-//                fragmentClass = DashBoardFragment.class;
-//                break;
-//            case R.id.activities:
-//                fragmentClass = ActivityFragment.class;
-//                break;
+        Fragment myFragment = null;
+        Class fragmentClass;
+        switch (item.getItemId())
+        {
+            case R.id.favorite_menu:
+                fragmentClass = FavoriteFragment.class;
+                break;
+            case R.id.eng_viet_menu:
+                fragmentClass = BoardFragment.class;
+                break;
 //            case R.id.setting:
 //                fragmentClass = SettingFragment.class;
 //                break;
@@ -61,18 +62,18 @@ public class MainActivity extends AppCompatActivity {
 //            case R.id.search:
 //                fragmentClass = SearchFragment.class;
 //                break;
-//            default:
-//                fragmentClass = EventFragment.class;
-//        }
-//        try {
-//            myFragment = (Fragment) fragmentClass.newInstance();
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.frame, myFragment).commit();
+            default:
+                fragmentClass = FavoriteFragment.class;
+        }
+        try {
+            myFragment = (Fragment) fragmentClass.newInstance();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_fragment, myFragment).commit();
         item.setChecked(true);
         binding.drawer.closeDrawers();
 //        setTitle(menuItem.getTitle());
