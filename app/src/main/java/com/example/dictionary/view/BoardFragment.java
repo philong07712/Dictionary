@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.example.dictionary.util.Constants;
 import com.example.dictionary.R;
@@ -52,6 +53,7 @@ public class BoardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerView();
+        initSearch();
     }
 
     @Override
@@ -87,6 +89,7 @@ public class BoardFragment extends Fragment {
         databaseAccess.close();
         wordList.clear();
         wordList.addAll(anhviet);
+        adapter.setWords(wordList);
         adapter.notifyDataSetChanged();
     }
 
@@ -109,7 +112,8 @@ public class BoardFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.i(TAG, "onScrolled: " + layoutManager.findLastVisibleItemPosition());
-                if (layoutManager.findLastVisibleItemPosition() == wordList.size() - 1) {
+                if (layoutManager.findLastVisibleItemPosition() == wordList.size() - 1
+                    && !adapter.isSearching) {
                     recyclerView.post(new Runnable() {
                         @Override
                         public void run() {
@@ -121,6 +125,22 @@ public class BoardFragment extends Fragment {
             }
         });
     }
+
+    public void initSearch() {
+        binding.svBoard.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
+
 
     public void navigateDefinition(Word word) {
         DefinitionFragment fragment = new DefinitionFragment();

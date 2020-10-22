@@ -7,13 +7,22 @@
     android:background="@color/colorGray_100"
     tools:context=".view.BoardFragment">
 
+    <SearchView
+        android:id="@+id/sv_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:queryHint="Nhập vào từ để tra"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_board"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_board"/>
+        app:layout_constraintTop_toBottomOf="@+id/sv_board"
+        tools:listitem="@layout/item_board" />
 </androidx.constraintlayout.widget.ConstraintLayout>
