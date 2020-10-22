@@ -5,4 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container_fragment"
-    tools:context=".view.MainActivity"/>
+    tools:context=".view.MainActivity">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/frame_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nv_board"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/colorWhite"
+            app:itemIconTint="@color/colorGray_600"
+            app:itemTextColor="@color/colorGray_600"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/drawermenu" />
+    </androidx.drawerlayout.widget.DrawerLayout>
+</FrameLayout>

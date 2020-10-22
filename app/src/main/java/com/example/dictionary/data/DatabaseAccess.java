@@ -69,7 +69,7 @@ public class DatabaseAccess {
     public List<Word> getWords(String filter) {
         ArrayList<Word> list = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM anh_viet where word like '% " +
-                filter + " %' limit 10", null);
+                filter + " %' limit 20", null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             Word word = new Word(cursor.getString(1), cursor.getString(2));

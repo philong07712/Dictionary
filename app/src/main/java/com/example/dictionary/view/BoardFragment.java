@@ -148,7 +148,7 @@ public class BoardFragment extends Fragment {
         bundle.putSerializable(Constants.WORD.WORD_ID, word);
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_fragment, fragment);
+                .replace(R.id.frame_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

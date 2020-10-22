@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Dictionary</string>
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
+    <string name="english_vietnamese">English - Vietnamese</string>
+    <string name="english_english">English - English</string>
+    <string name="vietnamese_english">Vietnamese - English</string>
+    <string name="favorite">Favorite</string>
+    <string name="your_words">Your Words</string>
+    <string name="share">Share</string>
+    <string name="help">Help</string>
 </resources>
