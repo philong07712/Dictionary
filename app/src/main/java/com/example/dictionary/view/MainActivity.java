@@ -8,9 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.dictionary.FavoriteFragment;
 import com.example.dictionary.R;
 import com.example.dictionary.databinding.ActivityMainBinding;
 import com.example.dictionary.util.Constants;
@@ -33,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
         BoardFragment fragment = new BoardFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().add(R.id.frame_fragment, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.tool_menu, menu);
+        return true;
     }
 
     @Override

@@ -32,6 +32,6 @@
             app:itemTextColor="@color/colorGray_600"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/drawermenu" />
+            app:menu="@menu/drawer_menu" />
     </androidx.drawerlayout.widget.DrawerLayout>
 </FrameLayout>

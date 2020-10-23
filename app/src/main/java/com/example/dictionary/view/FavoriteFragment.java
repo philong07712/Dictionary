@@ -1,4 +1,4 @@
-package com.example.dictionary;
+package com.example.dictionary.view;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,12 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.dictionary.viewmodel.FavoriteViewModel;
+import com.example.dictionary.R;
 import com.example.dictionary.data.EngDatabaseAccess;
 import com.example.dictionary.data.viet_anh.VietDatabaseAccess;
 import com.example.dictionary.databinding.FavoriteFragmentBinding;
 import com.example.dictionary.model.Word;
 import com.example.dictionary.util.Constants;
-import com.example.dictionary.view.DefinitionFragment;
 import com.example.dictionary.view.adapter.WordAdapter;
 
 import java.util.ArrayList;
