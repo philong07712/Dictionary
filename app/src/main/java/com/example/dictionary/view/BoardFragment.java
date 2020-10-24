@@ -111,7 +111,6 @@ public class BoardFragment extends Fragment {
                     else {
                         anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
                     }
-                    databaseAccess.close();
                 }
                 else {
                     EngDatabaseAccess databaseAccess = EngDatabaseAccess.getInstance(getContext());
@@ -122,7 +121,6 @@ public class BoardFragment extends Fragment {
                     else {
                         anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
                     }
-                    databaseAccess.close();
                 }
                 wordList.clear();
                 wordList.addAll(anhviet);
@@ -291,4 +289,9 @@ public class BoardFragment extends Fragment {
         mViewModel.setWords(wordList);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        speechRecognizer.destroy();
+    }
 }

@@ -69,17 +69,19 @@ public class YourWordFragment extends Fragment {
             public void run() {
                 EngDatabaseAccess access = EngDatabaseAccess.getInstance(getContext());
                 access.open();
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 3; i++) {
                     synchronized (wordList) {
                         wordList.add(access.getYourWord());
                     }
                 }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         }).start();
     }

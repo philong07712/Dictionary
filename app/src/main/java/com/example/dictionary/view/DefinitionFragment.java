@@ -50,7 +50,7 @@ public class DefinitionFragment extends Fragment {
                 }
             }
         });
-        t1.setSpeechRate(0.7f);
+        t1.setSpeechRate(1.0f);
     }
 
     @Override
@@ -95,5 +95,11 @@ public class DefinitionFragment extends Fragment {
         binding.btnMic.setOnClickListener(v -> {
             t1.speak(word.getContent(), TextToSpeech.QUEUE_FLUSH, null);
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        t1.shutdown();
     }
 }

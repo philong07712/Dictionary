@@ -68,6 +68,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
         this.listener = listener;
     }
 
+
     @Override
     public int getItemCount() {
         return wordFiltered.size();

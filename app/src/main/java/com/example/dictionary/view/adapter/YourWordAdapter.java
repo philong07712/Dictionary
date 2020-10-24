@@ -35,7 +35,7 @@ public class YourWordAdapter extends RecyclerView.Adapter<YourWordAdapter.YourWo
                 }
             }
         });
-        t1.setSpeechRate(0.7f);
+        t1.setSpeechRate(1.0f);
     }
 
     @NonNull
@@ -55,6 +55,12 @@ public class YourWordAdapter extends RecyclerView.Adapter<YourWordAdapter.YourWo
         holder.binding.btnAudio.setOnClickListener(v -> {
             t1.speak(word.getContent(), TextToSpeech.QUEUE_FLUSH, null);
         });
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        t1.shutdown();
     }
 
     @Override
