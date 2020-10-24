@@ -136,4 +136,17 @@ public class EngDatabaseAccess {
         Log.i("TAG", "addFavorite: ");
     }
 
+    public Word getYourWord() {
+        Word word;
+        Cursor cursor = database.rawQuery("SELECT * FROM anh_viet limit 1 OFFSET" +
+                " ABS(RANDOM()) % MAX((SELECT COUNT(*) FROM anh_viet), 1)", null);
+        cursor.moveToFirst();
+        word = new Word(TYPE,
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2));
+        cursor.close();
+        return word;
+    }
+
 }

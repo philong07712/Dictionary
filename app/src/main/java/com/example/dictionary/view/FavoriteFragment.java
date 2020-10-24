@@ -1,6 +1,7 @@
 package com.example.dictionary.view;
 
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,7 @@ public class FavoriteFragment extends Fragment {
     private final String TAG = FavoriteFragment.class.getSimpleName();
     private FavoriteViewModel mViewModel;
     FavoriteFragmentBinding binding;
-    private List<Word> words;
+    private List<Word> wordList;
     private WordAdapter adapter;
 
     public static FavoriteFragment newInstance() {
@@ -54,22 +56,47 @@ public class FavoriteFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(FavoriteViewModel.class);
-        // TODO: Use the ViewModel
-        EngDatabaseAccess databaseAccess = EngDatabaseAccess.getInstance(getContext());
-        databaseAccess.open();
-        List<Word> words = databaseAccess.getFavorite();
-        this.words.addAll(words);
+        mViewModel.getWords().observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
+            @Override
+            public void onChanged(List<Word> words) {
+                if (words.isEmpty()) {
+                    loadData();
+                }
+                else {
+                    wordList.addAll(words);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
 
-        VietDatabaseAccess databaseAccess1 = VietDatabaseAccess.getInstance(getContext());
-        databaseAccess1.open();
-        this.words.addAll(databaseAccess1.getFavorite());
+    }
 
-        adapter.notifyDataSetChanged();
+    public void loadData() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EngDatabaseAccess databaseAccess = EngDatabaseAccess.getInstance(getContext());
+                databaseAccess.open();
+                List<Word> words = databaseAccess.getFavorite();
+                wordList.addAll(words);
+
+                VietDatabaseAccess databaseAccess1 = VietDatabaseAccess.getInstance(getContext());
+                databaseAccess1.open();
+                wordList.addAll(databaseAccess1.getFavorite());
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "run: " + words.size());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).start();
     }
 
     public void initRecyclerView() {
-        words = new ArrayList<>();
-        adapter = new WordAdapter(getContext(), words, Constants.WORD.ENG_TYPE);
+        wordList = new ArrayList<>();
+        adapter = new WordAdapter(getContext(), wordList, Constants.WORD.ENG_TYPE);
         binding.rvFavorite.setAdapter(adapter);
         binding.rvFavorite.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.setOnClickListener((word, position) -> {
@@ -88,4 +115,9 @@ public class FavoriteFragment extends Fragment {
         transaction.commit();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mViewModel.setWords(wordList);
+    }
 }

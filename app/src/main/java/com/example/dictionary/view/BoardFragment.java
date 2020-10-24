@@ -87,33 +87,44 @@ public class BoardFragment extends Fragment {
     }
 
     public void loadData() {
-        List<Word> anhviet = new ArrayList<>();
-        if (mType == Constants.WORD.VIET_TYPE) {
-            VietDatabaseAccess databaseAccess = VietDatabaseAccess.getInstance(getContext());
-            databaseAccess.open();
-            if (wordList.isEmpty()) {
-                anhviet.addAll(databaseAccess.getWords());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Word> anhviet = new ArrayList<>();
+                if (mType == Constants.WORD.VIET_TYPE) {
+                    VietDatabaseAccess databaseAccess = VietDatabaseAccess.getInstance(getContext());
+                    databaseAccess.open();
+                    if (wordList.isEmpty()) {
+                        anhviet.addAll(databaseAccess.getWords());
+                    }
+                    else {
+                        anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
+                    }
+                    databaseAccess.close();
+                }
+                else {
+                    EngDatabaseAccess databaseAccess = EngDatabaseAccess.getInstance(getContext());
+                    databaseAccess.open();
+                    if (wordList.isEmpty()) {
+                        anhviet.addAll(databaseAccess.getWords());
+                    }
+                    else {
+                        anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
+                    }
+                    databaseAccess.close();
+                }
+                wordList.clear();
+                wordList.addAll(anhviet);
+                adapter.setWords(wordList);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
-            else {
-                anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
-            }
-            databaseAccess.close();
-        }
-        else {
-            EngDatabaseAccess databaseAccess = EngDatabaseAccess.getInstance(getContext());
-            databaseAccess.open();
-            if (wordList.isEmpty()) {
-                anhviet.addAll(databaseAccess.getWords());
-            }
-            else {
-                anhviet.addAll(databaseAccess.getWords(wordList.size(), 20));
-            }
-            databaseAccess.close();
-        }
-        wordList.clear();
-        wordList.addAll(anhviet);
-        adapter.setWords(wordList);
-        adapter.notifyDataSetChanged();
+        }).start();
+
     }
 
     public void initRecyclerView() {

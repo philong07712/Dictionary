@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.dictionary.R;
+import com.example.dictionary.YourWordFragment;
 import com.example.dictionary.databinding.ActivityMainBinding;
 import com.example.dictionary.util.Constants;
 import com.google.android.material.navigation.NavigationView;
@@ -58,14 +59,21 @@ public class MainActivity extends AppCompatActivity {
         {
             case R.id.favorite_menu:
                 fragmentClass = FavoriteFragment.class;
+                setTitle("            FAVORITE");
                 break;
             case R.id.eng_viet_menu:
                 fragmentClass = BoardFragment.class;
                 bundle.putInt(Constants.WORD.TYPE_ID, Constants.WORD.ENG_TYPE);
+                setTitle("            ENG-VIET");
                 break;
             case R.id.viet_eng_menu:
                 fragmentClass = BoardFragment.class;
                 bundle.putInt(Constants.WORD.TYPE_ID, Constants.WORD.VIET_TYPE);
+                setTitle("            VIET-ENG");
+                break;
+            case R.id.your_menu:
+                fragmentClass = YourWordFragment.class;
+                setTitle("            YOUR WORDS");
                 break;
 //            case R.id.logout:
 //                fragmentClass = LogoutFragment.class;
@@ -88,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.frame_fragment, myFragment).commit();
         item.setChecked(true);
         binding.drawer.closeDrawers();
-//        setTitle(menuItem.getTitle());
     }
 
     private void setupDrawerContainer(NavigationView nv) {
