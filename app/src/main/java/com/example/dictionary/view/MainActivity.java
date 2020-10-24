@@ -3,13 +3,24 @@ package com.example.dictionary.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.dictionary.R;
 import com.example.dictionary.YourWordFragment;
@@ -17,9 +28,14 @@ import com.example.dictionary.databinding.ActivityMainBinding;
 import com.example.dictionary.util.Constants;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+    private final int RecordAudioRequestCode = 255;
     ActivityMainBinding binding;
     private ActionBarDrawerToggle mToggle;
+    private String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupDrawerContainer(binding.nvBoard);
 
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            checkPermission();
+        }
         BoardFragment fragment = new BoardFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().add(R.id.frame_fragment, fragment);
         transaction.commit();
@@ -105,4 +124,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO},RecordAudioRequestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RecordAudioRequestCode && grantResults.length > 0 ){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Log.i(TAG, "onRequestPermissionsResult: ");
+        }
+    }
 }

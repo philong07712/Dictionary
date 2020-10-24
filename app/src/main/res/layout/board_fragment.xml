@@ -7,15 +7,30 @@
     android:background="@color/colorGray_100"
     tools:context=".view.BoardFragment">
 
+    <Button
+        android:id="@+id/btn_mic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/ic_baseline_mic_black_24"
+        app:layout_constraintBottom_toBottomOf="@+id/sv_board"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <SearchView
         android:id="@+id/sv_board"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="#FFFFFF"
         android:queryHint="Nhập vào từ để tra"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_mic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_board"
