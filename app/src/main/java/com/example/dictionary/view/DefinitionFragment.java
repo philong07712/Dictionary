@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.speech.tts.TextToSpeech;
 import android.text.Html;
 import android.text.SpannableString;
 import android.util.Log;
@@ -22,17 +23,34 @@ import com.example.dictionary.model.Word;
 import com.example.dictionary.util.Constants;
 import com.example.dictionary.viewmodel.DefinitionViewModel;
 
+import java.util.Locale;
+
 public class DefinitionFragment extends Fragment {
     private final String TAG = DefinitionFragment.class.getSimpleName();
     private DefinitionViewModel mViewModel;
     private DefinitionFragmentBinding binding;
     private Word word;
+    private TextToSpeech t1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DefinitionFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        t1 = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    t1.setLanguage(Locale.UK);
+                }
+            }
+        });
+        t1.setSpeechRate(0.7f);
     }
 
     @Override
@@ -50,6 +68,7 @@ public class DefinitionFragment extends Fragment {
             word = (Word) bundle.getSerializable(Constants.WORD.WORD_ID);
             initDefinition(word);
         }
+
         // TODO: Use the ViewModel
     }
 
@@ -72,6 +91,9 @@ public class DefinitionFragment extends Fragment {
                 access.open();
                 access.addFavorite(word.getId());
             }
+        });
+        binding.btnMic.setOnClickListener(v -> {
+            t1.speak(word.getContent(), TextToSpeech.QUEUE_FLUSH, null);
         });
     }
 }
